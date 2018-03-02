@@ -75,11 +75,12 @@ public class ConnectNModel implements IConnectN {
     for (int columns = 0; columns < this.width; columns++) {
       for (int rows = 0; rows < this.height; rows++) {
         int currPlayerCheck = this.grid.get(columns).get(rows);
+        // If the current spot is empty, then our grid isn't full
         if (currPlayerCheck == 0) {
           fullGrid = false;
         } else {
 
-          //check down
+          //check downward win con
           boolean downConnect = true;
           if (rows + this.goal - 1 > this.height - 1) {
             downConnect = false;
@@ -90,12 +91,11 @@ public class ConnectNModel implements IConnectN {
               }
             }
           }
-
+          //check rightward win con
           boolean rightConnect = true;
           if (columns + this.goal - 1 > this.width - 1) {
             rightConnect = false;
           } else {
-            //check right
             for (int goalIndex = 1; goalIndex < this.goal; goalIndex++) {
               if (currPlayerCheck != this.grid.get(columns + goalIndex).get(rows)) {
                 rightConnect = false;
@@ -103,12 +103,12 @@ public class ConnectNModel implements IConnectN {
             }
           }
 
+          //check diagonal downward win con
           boolean diagonalDownConnect = true;
           if (rows + (this.goal - 1) > this.height - 1 || columns + (this.goal - 1) > this.width -
                   1) {
             diagonalDownConnect = false;
           } else {
-            //check diagonal
             for (int goalIndex = 1; goalIndex < this.goal; goalIndex++) {
               if (currPlayerCheck != this.grid.get(columns + goalIndex).get(rows + goalIndex)) {
                 diagonalDownConnect = false;
@@ -116,6 +116,7 @@ public class ConnectNModel implements IConnectN {
             }
           }
 
+          //check diagonal upward win con
           boolean diagonalUpConnect = true;
           if (rows - (this.goal - 1) < 0 || columns + (this.goal - 1) > this.width - 1) {
             diagonalUpConnect = false;
@@ -127,15 +128,17 @@ public class ConnectNModel implements IConnectN {
               }
             }
           }
+
+          // If any of these were true, the current player has won
           if (downConnect || rightConnect || diagonalDownConnect || diagonalUpConnect) {
             this.currentGameState = GameState.GAMEOVER;
             return true;
           }
         }
-
-
       }
     }
+
+    // The game is a stalemate if the grid is full
     if (fullGrid) {
       this.currentGameState = GameState.STALEMATE;
     }

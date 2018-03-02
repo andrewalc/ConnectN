@@ -82,19 +82,22 @@ public class ConnectNController implements IConnectNController {
 
   }
 
-
+  @Override
   public int getN() {
     return n;
   }
 
+  @Override
   public int getWidth() {
     return width;
   }
 
+  @Override
   public int getHeight() {
     return height;
   }
-
+  
+  @Override
   public int getPlayers() {
     return players;
   }
